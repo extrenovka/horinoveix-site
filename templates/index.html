@@ -29,8 +29,34 @@
             width: 100%;
             height: 100%;
             z-index: 0;
-            opacity: 0.25;
+            opacity: 0.2;
             pointer-events: none;
+        }
+
+        /* Плавающие цифры */
+        .floating-numbers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .float-num {
+            position: absolute;
+            color: #0f0;
+            opacity: 0.1;
+            font-size: 20px;
+            font-weight: bold;
+            animation: float 20s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes float {
+            from { transform: translateY(100vh) rotate(0deg); }
+            to { transform: translateY(-100vh) rotate(360deg); }
         }
 
         /* Снег */
@@ -52,7 +78,6 @@
             font-size: 12px;
             animation: fall linear infinite;
             filter: blur(0.5px);
-            border-radius: 50%;
         }
 
         @keyframes fall {
@@ -68,12 +93,55 @@
             padding: 20px;
         }
 
+        /* Верхняя панель со статусом */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            border: 1px solid #222;
+            border-radius: 16px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #0f0;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; box-shadow: 0 0 5px #0f0; }
+            50% { opacity: 0.5; box-shadow: 0 0 20px #0f0; }
+            100% { opacity: 1; box-shadow: 0 0 5px #0f0; }
+        }
+
+        .visitor-count {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .visitor-count span {
+            color: #fff;
+            font-weight: bold;
+        }
+
         /* Шапка */
         .header {
             display: flex;
             align-items: center;
             gap: 30px;
-            margin: 40px 0 60px;
+            margin: 20px 0 40px;
             padding: 25px;
             border: 1px solid #333;
             border-radius: 20px;
@@ -151,7 +219,6 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             position: relative;
-            border-radius: 0;
         }
 
         .nav-btn::after {
@@ -220,6 +287,26 @@
             transition: all 0.3s;
             animation: cardAppear 0.5s ease backwards;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+            transform: rotate(45deg);
+            animation: shine 6s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            20% { transform: translateX(100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
         }
 
         .price-card:nth-child(1) { animation-delay: 0.1s; }
@@ -274,6 +361,8 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             font-family: 'Courier New', monospace;
+            position: relative;
+            z-index: 2;
         }
 
         .order-btn:hover {
@@ -299,6 +388,20 @@
             transition: all 0.3s;
             background: rgba(0, 0, 0, 0.9);
             animation: cardAppear 0.5s ease backwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .channel-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+            transform: rotate(45deg);
+            animation: shine 8s infinite;
         }
 
         .channel-card:nth-child(1) { animation-delay: 0.1s; }
@@ -317,11 +420,39 @@
             margin-bottom: 10px;
             color: #fff;
             letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
         }
 
         .channel-desc {
             color: #888;
             font-size: 13px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Индикатор загрузки */
+        .loading-bar {
+            width: 100%;
+            height: 2px;
+            background: #222;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+        }
+
+        .loading-progress {
+            width: 30%;
+            height: 100%;
+            background: #fff;
+            animation: load 3s infinite;
+        }
+
+        @keyframes load {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(200%); }
+            100% { transform: translateX(400%); }
         }
 
         /* Модальное окно */
@@ -420,6 +551,7 @@
             padding: 10px;
             border: 1px solid #222;
             border-radius: 12px;
+            text-align: center;
         }
 
         .close-btn {
@@ -463,14 +595,33 @@
             .price-grid, .channels-grid {
                 grid-template-columns: 1fr;
             }
+            .top-bar {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <canvas id="matrix-bg"></canvas>
+    
+    <!-- Плавающие цифры -->
+    <div class="floating-numbers" id="floatingNumbers"></div>
+    
     <div class="snow" id="snow"></div>
 
     <div class="container">
+        <!-- Верхняя панель -->
+        <div class="top-bar">
+            <div class="status">
+                <div class="status-dot"></div>
+                <span>STATUS: ONLINE</span>
+            </div>
+            <div class="visitor-count">
+                <span id="visitorCounter">1337</span> VISITORS TODAY
+            </div>
+        </div>
+
         <!-- Шапка -->
         <div class="header">
             <div class="avatar">
@@ -481,6 +632,11 @@
                 <div class="nick">@horinovex</div>
                 <div class="desc">Специалист в OSINT-сфере. Программирую и пишу софты и автоматизаторы под заказ.</div>
             </div>
+        </div>
+
+        <!-- Индикатор загрузки -->
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
         </div>
 
         <!-- Навигация -->
@@ -562,8 +718,8 @@
             </div>
             
             <div class="modal-payment">
-                <div>💳 BTC — 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</div>
-                <div>💸 USDT (TRC20) — TXYZ... (по запросу)</div>
+                <div>💳 BTC</div>
+                <div>💸 USDT</div>
             </div>
             
             <button class="close-btn" onclick="closeModal()">ЗАКРЫТЬ</button>
@@ -598,6 +754,25 @@
         }
         setInterval(matrix, 50);
 
+        // Плавающие цифры
+        function createFloatingNumbers() {
+            const container = document.getElementById('floatingNumbers');
+            const numbers = ['0', '1', '0101', '1010', '0011', '1100', 'OSINT', 'DEF', 'HACK'];
+            
+            for (let i = 0; i < 30; i++) {
+                const num = document.createElement('div');
+                num.className = 'float-num';
+                num.textContent = numbers[Math.floor(Math.random() * numbers.length)];
+                num.style.left = Math.random() * 100 + '%';
+                num.style.animationDuration = Math.random() * 30 + 20 + 's';
+                num.style.fontSize = Math.random() * 30 + 10 + 'px';
+                num.style.opacity = Math.random() * 0.1 + 0.05;
+                num.style.animationDelay = Math.random() * 10 + 's';
+                container.appendChild(num);
+            }
+        }
+        createFloatingNumbers();
+
         // Снег
         function createSnow() {
             const snow = document.getElementById('snow');
@@ -614,6 +789,13 @@
             }
         }
         createSnow();
+
+        // Счетчик посещений
+        let visitors = 1337;
+        setInterval(() => {
+            visitors += Math.floor(Math.random() * 10);
+            document.getElementById('visitorCounter').textContent = visitors;
+        }, 10000);
 
         // Навигация
         function showSection(section) {

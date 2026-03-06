@@ -3,263 +3,774 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>horinovex // SECURE</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <title>horinovex // DEFENDER</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Анимированный фон (матрица) */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ASCII Art */
+        .ascii {
+            color: #00ff41;
+            font-size: 8px;
+            line-height: 1.2;
+            text-align: center;
+            margin: 20px 0;
+            text-shadow: 0 0 8px #00ff41;
+            white-space: pre;
+            overflow-x: auto;
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 8px #00ff41; }
+            50% { text-shadow: 0 0 15px #00ff41, 0 0 30px #00ff41; }
+        }
+
+        /* Username */
+        .header {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #00ff41;
+            background: rgba(0, 20, 0, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+        }
+
+        .username {
+            font-size: 3em;
+            font-weight: bold;
+            letter-spacing: 5px;
+            animation: blink 1.5s infinite;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 20px;
+            height: 40px;
+            background: #00ff41;
+            animation: cursorBlink 1s infinite;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        @keyframes cursorBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 15px 25px;
+            border: 1px solid #00ff41;
+            border-radius: 5px;
+            background: rgba(0, 20, 0, 0.5);
+            min-width: 150px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Навигация */
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid #00ff41;
+            color: #00ff41;
+            padding: 15px 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn:hover {
+            background: #00ff41;
+            color: #000;
+            box-shadow: 0 0 30px #00ff41;
+            transform: scale(1.05);
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Секции */
+        .section {
+            display: none;
+            margin: 30px 0;
+            padding: 30px;
+            border: 1px solid #00ff41;
+            background: rgba(0, 20, 0, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #00ff41;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* Price Grid */
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .price-card {
+            border: 1px solid #00ff41;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s;
+            border-radius: 8px;
+            background: rgba(0, 10, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 30px #00ff41;
+            border-color: #fff;
+        }
+
+        .price-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            20% { transform: translateX(100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .price-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .price-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .price-desc {
+            color: #00ff41;
+            opacity: 0.8;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .price-value {
+            font-size: 28px;
+            color: #fff;
+            margin: 15px 0;
+            text-shadow: 0 0 10px #00ff41;
+        }
+
+        .order-btn {
+            background: transparent;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            padding: 10px 25px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            transition: all 0.3s;
+            border-radius: 3px;
+            width: 100%;
+        }
+
+        .order-btn:hover {
+            background: #00ff41;
+            color: #000;
+        }
+
+        /* Channels Grid */
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .channel-card {
+            border: 1px solid #00ff41;
+            padding: 25px;
+            text-align: center;
+            text-decoration: none;
+            color: #00ff41;
+            transition: all 0.3s;
+            border-radius: 8px;
+            background: rgba(0, 10, 0, 0.8);
+            display: block;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 30px #00ff41;
+            background: #00ff41;
+            color: #000;
+        }
+
+        .channel-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .channel-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* Chat */
+        .chat-container {
+            border: 1px solid #00ff41;
+            background: rgba(0, 10, 0, 0.9);
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 5px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-bottom: 1px solid #00ff41;
+        }
+
+        .msg-time {
+            color: #666;
+            font-size: 11px;
+            margin-right: 10px;
+        }
+
+        .msg-user {
+            color: #00ff41;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            border-top: 1px solid #00ff41;
+            padding: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: #000;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            border-radius: 3px;
+        }
+
+        .chat-send {
+            background: transparent;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            padding: 10px 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chat-send:hover {
+            background: #00ff41;
+            color: #000;
+        }
+
+        /* Archive */
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .archive-item {
+            border: 1px solid #00ff41;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .archive-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 20px #00ff41;
+        }
+
+        .archive-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            border: 2px solid #00ff41;
+            background: #0a0a0a;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .modal-content p {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #333;
+        }
+
+        .close-btn {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .close-btn:hover {
+            background: #00ff41;
+            color: #000;
+        }
+
+        /* Снег */
+        .snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .snowflake {
+            position: absolute;
+            color: #fff;
+            user-select: none;
+            opacity: 0.3;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            from { transform: translateY(-100vh); }
+            to { transform: translateY(100vh); }
+        }
+    </style>
 </head>
 <body>
-    <canvas id="snow"></canvas>
+    <canvas id="matrix"></canvas>
     
+    <div class="snow" id="snow"></div>
+
     <div class="container">
-        <!-- ASCII Art -->
-        <pre class="ascii-art">
-███████████████████████████████████████████████████████████████████████
-█─▄▄▄─█▄─██─▄█▄─▄▄─█─▄▄▄▄█▄─▄▄─█▄─██─▄█▄─▄▄─█▄─▀█▄─▄█─▄▄▄▄█▄─▄▄─█─▄▄▄▄█
-█─███▀██─██─███─▄█▀█▄▄▄▄─██─▄█▀██─██─███─▄█▀██─█▄▀─██▄▄▄▄─██─▄█▀█▄▄▄▄─█
-▀▄▄▄▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▀▀▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀
+        <!-- ASCII -->
+        <pre class="ascii">
+███████████████████████████████████████████████████████████████████████████████
+█─▄▄▄─█▄─██─▄█▄─▄▄─█─▄▄▄▄█▄─▄▄─█▄─██─▄█▄─▄▄─█▄─▀█▄─▄█─▄▄▄▄█▄─▄▄─█─▄▄▄▄█▄─▄▄─█
+█─███▀██─██─███─▄█▀█▄▄▄▄─██─▄█▀██─██─███─▄█▀██─█▄▀─██▄▄▄▄─██─▄█▀█▄▄▄▄─██─▄█▀█
+▀▄▄▄▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▀▀▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀
         </pre>
 
-        <!-- Username -->
-        <div class="username-container">
-            <span class="prompt">></span>
-            <span class="username" id="username">horinovex</span>
-            <span class="cursor">_</span>
+        <!-- Header -->
+        <div class="header">
+            <span class="username">horinovex</span>
+            <span class="cursor"></span>
         </div>
 
-        <!-- Matrix-like stats -->
+        <!-- Stats -->
         <div class="stats">
-            <div class="stat-item">
-                <span class="stat-label">[STATUS]</span>
-                <span class="stat-value">ONLINE</span>
+            <div class="stat">
+                <div class="stat-value" id="users">1,337</div>
+                <div class="stat-label">ACTIVE USERS</div>
             </div>
-            <div class="stat-item">
-                <span class="stat-label">[USERS]</span>
-                <span class="stat-value" id="user-count">1337</span>
+            <div class="stat">
+                <div class="stat-value" id="protected">892</div>
+                <div class="stat-label">PROTECTED</div>
             </div>
-            <div class="stat-item">
-                <span class="stat-label">[ENCRYPTION]</span>
-                <span class="stat-value">AES-256</span>
+            <div class="stat">
+                <div class="stat-value">AES-256</div>
+                <div class="stat-label">ENCRYPTION</div>
             </div>
         </div>
 
         <!-- Navigation -->
-        <div class="nav-buttons">
-            <button class="hacker-btn" onclick="showSection('price')">💰 PRICE</button>
-            <button class="hacker-btn" onclick="showSection('channels')">📡 CHANNELS</button>
-            <button class="hacker-btn" onclick="showSection('chat')">💬 CHAT</button>
-            <button class="hacker-btn" onclick="showSection('archive')">📦 ARCHIVE</button>
+        <div class="nav">
+            <button class="nav-btn" onclick="showSection('price')">💰 PRICE</button>
+            <button class="nav-btn" onclick="showSection('channels')">📡 CHANNELS</button>
+            <button class="nav-btn" onclick="showSection('chat')">💬 CHAT</button>
+            <button class="nav-btn" onclick="showSection('archive')">📦 ARCHIVE</button>
         </div>
 
         <!-- Price Section -->
-        <div id="price-section" class="section">
-            <h2 class="section-title">> SERVICES // PRICE LIST</h2>
+        <div id="price-section" class="section active">
+            <div class="section-title">> SERVICES // PROTECTION & OSINT</div>
             <div class="price-grid">
-                {% for service in services %}
+                <!-- Защита человека (Деф) -->
                 <div class="price-card">
-                    <div class="price-icon">{{ service.icon }}</div>
-                    <div class="price-name">{{ service.name }}</div>
-                    <div class="price-description">{{ service.description }}</div>
-                    <div class="price-value">{{ service.price }}</div>
-                    <button class="buy-btn" onclick="contact('{{ service.name }}')">ORDER</button>
+                    <div class="price-icon">🛡️</div>
+                    <div class="price-name">ЗАЩИТА ЧЕЛОВЕКА (DEF)</div>
+                    <div class="price-desc">Полная анонимность в сети, защита от слежки, VPN + Proxy, анти-доксинг, удаление личных данных</div>
+                    <div class="price-value">$5 НАВСЕГДА</div>
+                    <button class="order-btn" onclick="order('Защита человека')">ЗАКАЗАТЬ</button>
                 </div>
-                {% endfor %}
+
+                <!-- Поиск информации -->
+                <div class="price-card">
+                    <div class="price-icon">🔍</div>
+                    <div class="price-name">ПОИСК ИНФОРМАЦИИ</div>
+                    <div class="price-desc">OSINT, полная информация о человеке/компании, сливы, базы данных, соцсети, контакты</div>
+                    <div class="price-value">$5</div>
+                    <button class="order-btn" onclick="order('Поиск информации')">ЗАКАЗАТЬ</button>
+                </div>
+
+                <!-- Архив данных -->
+                <div class="price-card">
+                    <div class="price-icon">📁</div>
+                    <div class="price-name">АРХИВ ДАННЫХ</div>
+                    <div class="price-desc">Доступ к закрытым базам, старые сливы, базы госуслуг, почтовые базы</div>
+                    <div class="price-value">$10</div>
+                    <button class="order-btn" onclick="order('Архив данных')">ЗАКАЗАТЬ</button>
+                </div>
+
+                <!-- Консультация -->
+                <div class="price-card">
+                    <div class="price-icon">⚡</div>
+                    <div class="price-name">КОНСУЛЬТАЦИЯ</div>
+                    <div class="price-desc">Личная консультация по безопасности, настройка защиты, ответы на вопросы</div>
+                    <div class="price-value">$3</div>
+                    <button class="order-btn" onclick="order('Консультация')">ЗАКАЗАТЬ</button>
+                </div>
             </div>
         </div>
 
         <!-- Channels Section -->
-        <div id="channels-section" class="section hidden">
-            <h2 class="section-title">> CHANNELS // CONNECT</h2>
+        <div id="channels-section" class="section">
+            <div class="section-title">> CHANNELS // ГДЕ МЕНЯ НАЙТИ</div>
             <div class="channels-grid">
-                {% for channel in channels %}
-                <a href="{{ channel.link }}" target="_blank" class="channel-card">
-                    <div class="channel-icon">{{ channel.icon }}</div>
-                    <div class="channel-name">{{ channel.name }}</div>
-                    <div class="channel-description">{{ channel.description }}</div>
+                <a href="https://t.me/horinovex" target="_blank" class="channel-card">
+                    <div class="channel-icon">📢</div>
+                    <div class="channel-name">HORINOVEX NEWS</div>
+                    <div class="channel-desc">Главный канал</div>
                 </a>
-                {% endfor %}
+                <a href="https://t.me/horinovex_chat" target="_blank" class="channel-card">
+                    <div class="channel-icon">💬</div>
+                    <div class="channel-name">ЧАТ horinovex</div>
+                    <div class="channel-desc">Общение и помощь</div>
+                </a>
+                <a href="https://t.me/horinovex_archive" target="_blank" class="channel-card">
+                    <div class="channel-icon">📦</div>
+                    <div class="channel-name">ARCHIVE</div>
+                    <div class="channel-desc">Базы и сливы</div>
+                </a>
+                <a href="https://t.me/horinovex_support" target="_blank" class="channel-card">
+                    <div class="channel-icon">🛡️</div>
+                    <div class="channel-name">SUPPORT</div>
+                    <div class="channel-desc">Поддержка 24/7</div>
+                </a>
             </div>
         </div>
 
         <!-- Chat Section -->
-        <div id="chat-section" class="section hidden">
-            <h2 class="section-title">> CHAT // horinovex</h2>
+        <div id="chat-section" class="section">
+            <div class="section-title">> CHAT // horinovex</div>
             <div class="chat-container">
                 <div class="chat-messages" id="chat-messages">
-                    <!-- Сообщения загружаются через JS -->
+                    <!-- JavaScript заполнит -->
                 </div>
-                <div class="chat-input-container">
-                    <input type="text" id="chat-input" class="chat-input" placeholder="Type your message..." maxlength="200">
-                    <button class="chat-send" onclick="sendMessage()">SEND</button>
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="chat-input" placeholder="Ваше сообщение..." maxlength="200">
+                    <button class="chat-send" onclick="sendMessage()">→</button>
                 </div>
             </div>
         </div>
 
         <!-- Archive Section -->
-        <div id="archive-section" class="section hidden">
-            <h2 class="section-title">> ARCHIVE // DATABASES</h2>
+        <div id="archive-section" class="section">
+            <div class="section-title">> ARCHIVE // ДОСТУПНЫЕ БАЗЫ</div>
             <div class="archive-grid">
-                <div class="archive-item" onclick="downloadArchive('combolist')">
+                <div class="archive-item" onclick="order('combolist 2024')">
                     <div class="archive-icon">📁</div>
-                    <div class="archive-name">combolist_2024.txt</div>
-                    <div class="archive-size">2.3 GB</div>
-                    <div class="archive-date">2024-01-15</div>
+                    <div>combolist_2024.txt</div>
+                    <div style="font-size: 12px;">2.3 GB</div>
                 </div>
-                <div class="archive-item" onclick="downloadArchive('leaks')">
+                <div class="archive-item" onclick="order('major leaks 2023')">
                     <div class="archive-icon">📁</div>
-                    <div class="archive-name">major_leaks_2023.7z</div>
-                    <div class="archive-size">15.7 GB</div>
-                    <div class="archive-date">2023-12-20</div>
+                    <div>major_leaks_2023.7z</div>
+                    <div style="font-size: 12px;">15.7 GB</div>
                 </div>
-                <div class="archive-item" onclick="downloadArchive('tools')">
+                <div class="archive-item" onclick="order('hack tools pack')">
                     <div class="archive-icon">📁</div>
-                    <div class="archive-name">hack_tools_pack.rar</div>
-                    <div class="archive-size">4.1 GB</div>
-                    <div class="archive-date">2024-02-01</div>
+                    <div>hack_tools_pack.rar</div>
+                    <div style="font-size: 12px;">4.1 GB</div>
                 </div>
-                <div class="archive-item" onclick="downloadArchive('databases')">
+                <div class="archive-item" onclick="order('sql dumps 2024')">
                     <div class="archive-icon">📁</div>
-                    <div class="archive-name">sql_dumps_2024.zip</div>
-                    <div class="archive-size">8.5 GB</div>
-                    <div class="archive-date">2024-02-10</div>
+                    <div>sql_dumps_2024.zip</div>
+                    <div style="font-size: 12px;">8.5 GB</div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Contact Modal -->
-        <div id="contact-modal" class="modal hidden">
-            <div class="modal-content">
-                <h3>CONTACT</h3>
-                <p>Telegram: <span id="contact-service">@horinovex</span></p>
-                <p>Session: <span id="contact-id">057d5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a</span></p>
-                <p>Email: <span id="contact-email">horinovex@onion.com</span></p>
-                <button class="close-btn" onclick="closeModal()">CLOSE</button>
             </div>
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal" id="order-modal">
+        <div class="modal-content">
+            <h3>📨 ЗАКАЗ</h3>
+            <p>Вы выбрали: <span id="selected-service"></span></p>
+            <p>Telegram: <b>@horinovex</b></p>
+            <p>Session ID: <b>05a1b2c3d4e5f67890</b></p>
+            <p>Оплата: BTC | USDT | Сбер</p>
+            <button class="close-btn" onclick="closeModal()">ЗАКРЫТЬ</button>
+        </div>
+    </div>
+
     <script>
-        // Снег
-        const canvas = document.getElementById('snow');
+        // Матрица
+        const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
-        
+
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        
-        const snowflakes = [];
-        for (let i = 0; i < 100; i++) {
-            snowflakes.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.random() * 3 + 1,
-                speed: Math.random() * 1 + 0.5
+
+        const cols = Math.floor(canvas.width / 20) + 1;
+        const ypos = Array(cols).fill(0);
+
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        function matrix() {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0f0';
+            ctx.font = '15px monospace';
+
+            ypos.forEach((y, ind) => {
+                const text = String.fromCharCode(Math.random() * 128);
+                const x = ind * 20;
+                ctx.fillText(text, x, y);
+                if (y > canvas.height + Math.random() * 10000) {
+                    ypos[ind] = 0;
+                } else {
+                    ypos[ind] = y + 20;
+                }
             });
         }
-        
-        function drawSnow() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'white';
-            
-            for (let flake of snowflakes) {
-                ctx.beginPath();
-                ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-                ctx.fill();
-                
-                flake.y += flake.speed;
-                
-                if (flake.y > canvas.height) {
-                    flake.y = 0;
-                    flake.x = Math.random() * canvas.width;
-                }
+
+        setInterval(matrix, 50);
+
+        // Снег
+        function createSnow() {
+            const snow = document.getElementById('snow');
+            for (let i = 0; i < 50; i++) {
+                const flake = document.createElement('div');
+                flake.className = 'snowflake';
+                flake.innerHTML = '❄️';
+                flake.style.left = Math.random() * 100 + '%';
+                flake.style.animationDuration = Math.random() * 3 + 2 + 's';
+                flake.style.fontSize = Math.random() * 20 + 10 + 'px';
+                flake.style.opacity = Math.random() * 0.3;
+                snow.appendChild(flake);
             }
-            
-            requestAnimationFrame(drawSnow);
         }
-        
-        drawSnow();
+        createSnow();
 
         // Навигация
         function showSection(section) {
-            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
-            document.getElementById(section + '-section').classList.remove('hidden');
-            
-            if (section === 'chat') loadMessages();
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(section + '-section').classList.add('active');
         }
 
         // Чат
-        async function loadMessages() {
-            const response = await fetch('/api/chat/messages');
-            const messages = await response.json();
+        let messages = [];
+
+        function addMessage(text, user = 'horinovex') {
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            messages.push({ user, text, time });
+            if (messages.length > 20) messages.shift();
             
             const container = document.getElementById('chat-messages');
-            container.innerHTML = '';
-            
-            for (let msg of messages) {
-                addMessageToChat(msg);
-            }
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const text = input.value.trim();
-            
-            if (!text) return;
-            
-            const response = await fetch('/api/chat/send', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({text: text})
-            });
-            
-            const message = await response.json();
-            addMessageToChat(message);
-            input.value = '';
-        }
-
-        function addMessageToChat(msg) {
-            const container = document.getElementById('chat-messages');
-            const div = document.createElement('div');
-            div.className = 'chat-message';
-            div.innerHTML = `
-                <span class="msg-time">[${msg.time}]</span>
-                <span class="msg-user">${msg.username}:</span>
-                <span class="msg-text">${msg.text}</span>
-            `;
-            container.appendChild(div);
+            container.innerHTML = messages.map(m => 
+                `<div class="chat-message">
+                    <span class="msg-time">[${m.time}]</span>
+                    <span class="msg-user">${m.user}:</span>
+                    <span>${m.text}</span>
+                </div>`
+            ).join('');
             container.scrollTop = container.scrollHeight;
         }
 
-        // Контакт
-        function contact(service) {
-            document.getElementById('contact-service').textContent = service;
-            document.getElementById('contact-modal').classList.remove('hidden');
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+            addMessage(text, 'horinovex');
+            input.value = '';
+        }
+
+        document.getElementById('chat-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Приветственное сообщение
+        setTimeout(() => {
+            addMessage('🛡️ Добро пожаловать. Я horinovex. Чем могу помочь?');
+        }, 500);
+
+        // Заказ
+        function order(service) {
+            document.getElementById('selected-service').textContent = service;
+            document.getElementById('order-modal').classList.add('active');
         }
 
         function closeModal() {
-            document.getElementById('contact-modal').classList.add('hidden');
+            document.getElementById('order-modal').classList.remove('active');
         }
 
-        // Архив
-        function downloadArchive(name) {
-            contact('Archive: ' + name);
-        }
-
-        // Счетчик пользователей
+        // Счетчики
         setInterval(() => {
-            const count = document.getElementById('user-count');
-            const newCount = 1337 + Math.floor(Math.random() * 100);
-            count.textContent = newCount;
+            document.getElementById('users').textContent = Math.floor(1337 + Math.random() * 100);
+            document.getElementById('protected').textContent = Math.floor(892 + Math.random() * 50);
         }, 5000);
-
-        // Отслеживание
-        fetch('/api/track', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({page: window.location.pathname})
-        });
-
-        // Enter в чате
-        document.getElementById('chat-input')?.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
     </script>
 </body>
 </html>

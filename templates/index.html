@@ -126,7 +126,7 @@
             letter-spacing: 1px;
         }
 
-        /* Блок "ЧЕМ Я ЗАНИМАЮСЬ / МОИ ТОВАРЫ" */
+        /* ЧЕМ Я ЗАНИМАЮСЬ / МОИ ТОВАРЫ */
         .info-block {
             text-align: center;
             margin: 20px 0 30px;
@@ -304,45 +304,6 @@
             margin-bottom: 5px;
         }
 
-        /* Private 2x2 Grid */
-        .private-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .private-card {
-            border: 1px solid #fff;
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            background: #000;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .private-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 20px rgba(255,255,255,0.2);
-        }
-
-        .private-icon {
-            font-size: 30px;
-            margin-bottom: 10px;
-        }
-
-        .private-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .private-desc {
-            color: #aaa;
-            font-size: 12px;
-        }
-
         /* Telegram Contact */
         .telegram-contact {
             margin-top: 20px;
@@ -393,7 +354,6 @@
                 <span>🔹 OSINT</span> — поиск информации, пробив, анализ данных<br>
                 <span>🔹 Защита</span> — анти-доксинг, свантинг, безопасность<br>
                 <span>🔹 Обучение</span> — мануалы, курсы, приватные материалы<br>
-                <span>🔹 Взлом камер</span> — доступ, эксплуатация (приватка)<br>
                 <span>🔹 КФ</span> — личное сопровождение
             </div>
         </div>
@@ -438,25 +398,14 @@
                     <button class="order-btn" onclick="order('Мануалы')">→</button>
                 </div>
 
-                <!-- PRIVATE 2x2 -->
+                <!-- PRIVATE (только группа) -->
                 <div class="price-card">
                     <div class="price-name">📦 PRIVATE</div>
-                    <div class="price-desc">Приглашу в группу со всеми материалами, обучениями, программами.</div>
-                    <div class="private-grid">
-                        <!-- Взлом камер -->
-                        <div class="private-card" onclick="order('Взлом камер (private)')">
-                            <div class="private-icon">🎥</div>
-                            <div class="private-name">Взлом камер</div>
-                            <div class="private-desc">Доступ, эксплойты</div>
-                        </div>
-                        <!-- Обучение -->
-                        <div class="private-card" onclick="order('Обучение (private)')">
-                            <div class="private-icon">💻</div>
-                            <div class="private-name">Обучение</div>
-                            <div class="private-desc">Хакинг, прог-ние</div>
-                        </div>
+                    <div class="price-desc">
+                        Приглашу в группу со всеми материалами, обучениями, программами.
                     </div>
-                    <button class="order-btn" onclick="order('Private group')" style="margin-top: 10px;">→</button>
+                    <div class="price-value">$10</div>
+                    <button class="order-btn" onclick="order('Private group')">→</button>
                 </div>
             </div>
         </div>

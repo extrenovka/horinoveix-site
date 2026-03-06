@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>horinovex // SECURE</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <canvas id="snow"></canvas>
+    
+    <div class="container">
+        <!-- ASCII Art -->
+        <pre class="ascii-art">
+███████████████████████████████████████████████████████████████████████
+█─▄▄▄─█▄─██─▄█▄─▄▄─█─▄▄▄▄█▄─▄▄─█▄─██─▄█▄─▄▄─█▄─▀█▄─▄█─▄▄▄▄█▄─▄▄─█─▄▄▄▄█
+█─███▀██─██─███─▄█▀█▄▄▄▄─██─▄█▀██─██─███─▄█▀██─█▄▀─██▄▄▄▄─██─▄█▀█▄▄▄▄─█
+▀▄▄▄▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀▀▄▄▄▄▀▀▄▄▄▄▄▀▄▄▄▀▀▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀
+        </pre>
+
+        <!-- Username -->
+        <div class="username-container">
+            <span class="prompt">></span>
+            <span class="username" id="username">horinovex</span>
+            <span class="cursor">_</span>
+        </div>
+
+        <!-- Matrix-like stats -->
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">[STATUS]</span>
+                <span class="stat-value">ONLINE</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">[USERS]</span>
+                <span class="stat-value" id="user-count">1337</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">[ENCRYPTION]</span>
+                <span class="stat-value">AES-256</span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <button class="hacker-btn" onclick="showSection('price')">💰 PRICE</button>
+            <button class="hacker-btn" onclick="showSection('channels')">📡 CHANNELS</button>
+            <button class="hacker-btn" onclick="showSection('chat')">💬 CHAT</button>
+            <button class="hacker-btn" onclick="showSection('archive')">📦 ARCHIVE</button>
+        </div>
+
+        <!-- Price Section -->
+        <div id="price-section" class="section">
+            <h2 class="section-title">> SERVICES // PRICE LIST</h2>
+            <div class="price-grid">
+                {% for service in services %}
+                <div class="price-card">
+                    <div class="price-icon">{{ service.icon }}</div>
+                    <div class="price-name">{{ service.name }}</div>
+                    <div class="price-description">{{ service.description }}</div>
+                    <div class="price-value">{{ service.price }}</div>
+                    <button class="buy-btn" onclick="contact('{{ service.name }}')">ORDER</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Channels Section -->
+        <div id="channels-section" class="section hidden">
+            <h2 class="section-title">> CHANNELS // CONNECT</h2>
+            <div class="channels-grid">
+                {% for channel in channels %}
+                <a href="{{ channel.link }}" target="_blank" class="channel-card">
+                    <div class="channel-icon">{{ channel.icon }}</div>
+                    <div class="channel-name">{{ channel.name }}</div>
+                    <div class="channel-description">{{ channel.description }}</div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Chat Section -->
+        <div id="chat-section" class="section hidden">
+            <h2 class="section-title">> CHAT // horinovex</h2>
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Сообщения загружаются через JS -->
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" id="chat-input" class="chat-input" placeholder="Type your message..." maxlength="200">
+                    <button class="chat-send" onclick="sendMessage()">SEND</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Archive Section -->
+        <div id="archive-section" class="section hidden">
+            <h2 class="section-title">> ARCHIVE // DATABASES</h2>
+            <div class="archive-grid">
+                <div class="archive-item" onclick="downloadArchive('combolist')">
+                    <div class="archive-icon">📁</div>
+                    <div class="archive-name">combolist_2024.txt</div>
+                    <div class="archive-size">2.3 GB</div>
+                    <div class="archive-date">2024-01-15</div>
+                </div>
+                <div class="archive-item" onclick="downloadArchive('leaks')">
+                    <div class="archive-icon">📁</div>
+                    <div class="archive-name">major_leaks_2023.7z</div>
+                    <div class="archive-size">15.7 GB</div>
+                    <div class="archive-date">2023-12-20</div>
+                </div>
+                <div class="archive-item" onclick="downloadArchive('tools')">
+                    <div class="archive-icon">📁</div>
+                    <div class="archive-name">hack_tools_pack.rar</div>
+                    <div class="archive-size">4.1 GB</div>
+                    <div class="archive-date">2024-02-01</div>
+                </div>
+                <div class="archive-item" onclick="downloadArchive('databases')">
+                    <div class="archive-icon">📁</div>
+                    <div class="archive-name">sql_dumps_2024.zip</div>
+                    <div class="archive-size">8.5 GB</div>
+                    <div class="archive-date">2024-02-10</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Modal -->
+        <div id="contact-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>CONTACT</h3>
+                <p>Telegram: <span id="contact-service">@horinovex</span></p>
+                <p>Session: <span id="contact-id">057d5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a</span></p>
+                <p>Email: <span id="contact-email">horinovex@onion.com</span></p>
+                <button class="close-btn" onclick="closeModal()">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Снег
+        const canvas = document.getElementById('snow');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const snowflakes = [];
+        for (let i = 0; i < 100; i++) {
+            snowflakes.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 3 + 1,
+                speed: Math.random() * 1 + 0.5
+            });
+        }
+        
+        function drawSnow() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            
+            for (let flake of snowflakes) {
+                ctx.beginPath();
+                ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                flake.y += flake.speed;
+                
+                if (flake.y > canvas.height) {
+                    flake.y = 0;
+                    flake.x = Math.random() * canvas.width;
+                }
+            }
+            
+            requestAnimationFrame(drawSnow);
+        }
+        
+        drawSnow();
+
+        // Навигация
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(section + '-section').classList.remove('hidden');
+            
+            if (section === 'chat') loadMessages();
+        }
+
+        // Чат
+        async function loadMessages() {
+            const response = await fetch('/api/chat/messages');
+            const messages = await response.json();
+            
+            const container = document.getElementById('chat-messages');
+            container.innerHTML = '';
+            
+            for (let msg of messages) {
+                addMessageToChat(msg);
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            const response = await fetch('/api/chat/send', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text: text})
+            });
+            
+            const message = await response.json();
+            addMessageToChat(message);
+            input.value = '';
+        }
+
+        function addMessageToChat(msg) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = 'chat-message';
+            div.innerHTML = `
+                <span class="msg-time">[${msg.time}]</span>
+                <span class="msg-user">${msg.username}:</span>
+                <span class="msg-text">${msg.text}</span>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Контакт
+        function contact(service) {
+            document.getElementById('contact-service').textContent = service;
+            document.getElementById('contact-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('contact-modal').classList.add('hidden');
+        }
+
+        // Архив
+        function downloadArchive(name) {
+            contact('Archive: ' + name);
+        }
+
+        // Счетчик пользователей
+        setInterval(() => {
+            const count = document.getElementById('user-count');
+            const newCount = 1337 + Math.floor(Math.random() * 100);
+            count.textContent = newCount;
+        }, 5000);
+
+        // Отслеживание
+        fetch('/api/track', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({page: window.location.pathname})
+        });
+
+        // Enter в чате
+        document.getElementById('chat-input')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>

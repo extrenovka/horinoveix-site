@@ -1,57 +1,39 @@
-from flask import Flask, render_template, jsonify, request, session
+from flask import Flask, render_template, jsonify, request
 import datetime
-import json
 import random
 import string
+import os
 
 app = Flask(__name__)
 app.secret_key = 'horinovex_secret_key_2024'
 
-# Ваши услуги
+# Услуги
 services = [
     {
-        'name': '🛡️ Защита в интернете (Деф)',
+        'name': '🛡️ DEF (ЗАЩИТА)',
         'price': '$5 НАВСЕГДА',
-        'description': 'Полная анонимность, защита от слежки, VPN + Proxy',
+        'description': 'Я лично защищаю вас. Полная анонимность в сети, анти-доксинг, удаление личных данных.',
         'icon': '🛡️'
     },
     {
-        'name': '🔍 Поиск информации (OSINT)',
+        'name': '🔍 OSINT (ПОИСК)',
         'price': '$5',
-        'description': 'Найду любую информацию о человеке/компании',
+        'description': 'Полная информация о человеке/компании. Сливы, базы, соцсети, контакты, пробив.',
         'icon': '🔍'
-    },
-    {
-        'name': '📁 Архив данных',
-        'price': '$10',
-        'description': 'Доступ к закрытым архивам и базам',
-        'icon': '📁'
     }
 ]
 
-# Каналы (вы заполняете сами)
+# Каналы
 channels = [
     {
-        'name': '📢 HORINOVEX NEWS',
-        'link': 'https://t.me/your_channel_1',
-        'description': 'Главные новости и обновления',
+        'name': '📢 @horinovpr',
+        'link': 'https://t.me/horinovpr',
+        'description': 'основной канал',
         'icon': '📡'
-    },
-    {
-        'name': '💬 Чат horinovex',
-        'link': 'https://t.me/your_chat',
-        'description': 'Общение с единомышленниками',
-        'icon': '💭'
-    },
-    {
-        'name': '📦 Архив horinovex',
-        'link': 'https://t.me/your_archive',
-        'description': 'Базы, сливы, инструменты',
-        'icon': '📦'
     }
 ]
 
-# Сообщения чата
+# Сообщения чата (если понадобятся)
 chat_messages = []
 
 @app.route('/')
@@ -71,18 +53,25 @@ def send_message():
         'id': ''.join(random.choices(string.ascii_letters + string.digits, k=8))
     }
     chat_messages.append(message)
-    # Храним только последние 50 сообщений
     if len(chat_messages) > 50:
         chat_messages.pop(0)
     return jsonify(message)
 
 @app.route('/api/chat/messages')
 def get_messages():
-    return jsonify(chat_messages[-20:])  # Последние 20 сообщений
+    return jsonify(chat_messages[-20:])
 
 @app.route('/api/track', methods=['POST'])
 def track():
     return jsonify({'status': 'ok'})
 
+@app.route('/order', methods=['POST'])
+def order():
+    data = request.json
+    # Здесь можно добавить сохранение заказов
+    return jsonify({'status': 'order received'})
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000)
+    # Эта строчка важна для Render!
+    port = int(os.environ.get('PORT', 10000))
+    app.run(host='0.0.0.0', port=port)

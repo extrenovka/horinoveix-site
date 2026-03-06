@@ -21,7 +21,7 @@
             overflow-x: hidden;
         }
 
-        /* Снег (белые точки) */
+        /* Снег */
         .snow {
             position: fixed;
             top: 0;
@@ -54,7 +54,6 @@
             padding: 20px;
         }
 
-        /* Заголовок проекта */
         .project-title {
             text-align: center;
             font-size: 28px;
@@ -66,7 +65,7 @@
             text-transform: uppercase;
         }
 
-        /* Квадрат с ником и аватаркой (скруглённый) */
+        /* Квадрат с ником и аватаркой */
         .profile-card {
             width: 300px;
             height: 300px;
@@ -114,7 +113,7 @@
             letter-spacing: 1px;
         }
 
-        /* Навигация (только 2 кнопки) */
+        /* Навигация (3 кнопки) */
         .nav {
             display: flex;
             justify-content: center;
@@ -231,7 +230,7 @@
             color: #000;
         }
 
-        /* Channels (одна кнопка) */
+        /* Channels */
         .channels-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -258,6 +257,43 @@
             font-size: 20px;
             font-weight: bold;
             margin-bottom: 5px;
+        }
+
+        /* Archive Grid (Приватка) */
+        .archive-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .archive-item {
+            border: 1px solid #fff;
+            border-radius: 16px;
+            padding: 20px;
+            background: #000;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .archive-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(255,255,255,0.2);
+        }
+
+        .archive-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .archive-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .archive-desc {
+            color: #aaa;
+            font-size: 14px;
         }
 
         /* Modal */
@@ -320,53 +356,51 @@
     <div class="snow" id="snow"></div>
 
     <div class="container">
-        <!-- horinov project -->
         <div class="project-title">HORINOV PROJECT</div>
 
-        <!-- Квадрат с ником и аватаркой -->
+        <!-- Квадрат с ником -->
         <div class="profile-card">
             <div class="avatar">
-                <!-- СЮДА ВСТАВЬ ССЫЛКУ НА АВАТАРКУ -->
                 <img src="https://ibb.co/GfWsJXhw" alt="avatar" onerror="this.style.display='none'; this.parentElement.innerHTML='📷';">
             </div>
             <div class="nick-large">horinov</div>
             <div class="nick-small">@horinovex</div>
         </div>
 
-        <!-- Навигация (только 2 кнопки) -->
+        <!-- Навигация (3 кнопки) -->
         <div class="nav">
             <button class="nav-btn" onclick="showSection('price')">PRICE</button>
             <button class="nav-btn" onclick="showSection('channels')">CHANNELS</button>
+            <button class="nav-btn" onclick="showSection('archive')">ARCHIVE</button>
         </div>
 
-        <!-- Price Section -->
+        <!-- Price Section (публичные услуги) -->
         <div id="price-section" class="section active">
-            <div class="section-title">⟡ SERVICES</div>
+            <div class="section-title">⟡ PUBLIC SERVICES</div>
             <div class="price-grid">
-                <!-- Защита человека (DEF) -->
+                <!-- DEF -->
                 <div class="price-card">
-                    <div class="price-name">🛡️ DEF (ЗАЩИТА)</div>
+                    <div class="price-name">🛡️ DEF</div>
                     <div class="price-desc">
-                        Я лично защищаю вас.<br>
-                        Полная анонимность в сети, анти-докинг, удаление личных данных, приватность под ключ. VPN + Proxy, безопасность связи.
+                        Я лично защищаю вас. Полная анонимность, анти-докинг, удаление данных, приватность.
                     </div>
                     <div class="price-value">$5 НАВСЕГДА</div>
-                    <button class="order-btn" onclick="order('Def (защита)')">→</button>
+                    <button class="order-btn" onclick="order('Def')">→</button>
                 </div>
 
-                <!-- Поиск информации -->
+                <!-- OSINT базовый -->
                 <div class="price-card">
-                    <div class="price-name">🔍 OSINT (ПОИСК)</div>
+                    <div class="price-name">🔍 OSINT</div>
                     <div class="price-desc">
-                        Полная информация о человеке/компании. Сливы, базы, соцсети, контакты, пробив.
+                        Поиск информации о человеке/компании (базовый).
                     </div>
                     <div class="price-value">$5</div>
-                    <button class="order-btn" onclick="order('OSINT')">→</button>
+                    <button class="order-btn" onclick="order('OSINT basic')">→</button>
                 </div>
             </div>
         </div>
 
-        <!-- Channels Section (только один канал) -->
+        <!-- Channels Section -->
         <div id="channels-section" class="section">
             <div class="section-title">⟡ CHANNEL</div>
             <div class="channels-grid">
@@ -374,6 +408,40 @@
                     <div class="channel-name">📢 @horinovpr</div>
                     <div style="font-size: 14px; opacity: 0.8;">основной канал</div>
                 </a>
+            </div>
+        </div>
+
+        <!-- Archive Section (ПРИВАТКА) -->
+        <div id="archive-section" class="section">
+            <div class="section-title">⟡ PRIVATE ARCHIVE</div>
+            <div class="archive-grid">
+                <!-- Взлом камер -->
+                <div class="archive-item" onclick="order('Взлом камер')">
+                    <div class="archive-icon">🎥</div>
+                    <div class="archive-name">Взлом камер</div>
+                    <div class="archive-desc">Доступ к камерам, эксплуатация уязвимостей</div>
+                </div>
+
+                <!-- Обучение программированию -->
+                <div class="archive-item" onclick="order('Обучение программированию')">
+                    <div class="archive-icon">💻</div>
+                    <div class="archive-name">Обучение программированию</div>
+                    <div class="archive-desc">Python, C++, хакинг, автоматизация</div>
+                </div>
+
+                <!-- OSINT продвинутый -->
+                <div class="archive-item" onclick="order('OSINT продвинутый')">
+                    <div class="archive-icon">🔍</div>
+                    <div class="archive-name">OSINT (продвинутый)</div>
+                    <div class="archive-desc">Закрытые методы, базы, пробив</div>
+                </div>
+
+                <!-- Анонимность -->
+                <div class="archive-item" onclick="order('Анонимность')">
+                    <div class="archive-icon">🛡️</div>
+                    <div class="archive-name">Анонимность</div>
+                    <div class="archive-desc">Полная безопасность, анти-слежка, OPSEC</div>
+                </div>
             </div>
         </div>
     </div>
@@ -406,13 +474,11 @@
         }
         createSnow();
 
-        // Навигация
         function showSection(section) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(section + '-section').classList.add('active');
         }
 
-        // Заказ
         function order(service) {
             document.getElementById('selected-service').textContent = service;
             document.getElementById('order-modal').classList.add('active');
@@ -422,7 +488,6 @@
             document.getElementById('order-modal').classList.remove('active');
         }
 
-        // Аватарка по умолчанию (если ссылка не работает)
         window.addEventListener('load', function() {
             const avatarImg = document.querySelector('.avatar img');
             if (avatarImg) {

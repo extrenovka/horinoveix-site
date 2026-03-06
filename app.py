@@ -10,16 +10,28 @@ app.secret_key = 'horinovex_secret_key_2024'
 # Услуги
 services = [
     {
-        'name': '🛡️ DEF (ЗАЩИТА)',
+        'name': '🛡️ DEF',
         'price': '$5 НАВСЕГДА',
-        'description': 'Я лично защищаю вас. Полная анонимность в сети, анти-доксинг, удаление личных данных.',
+        'description': 'Я лично защищаю вас от сватинга, пробива, доксинга. Хожу за вас в КФ.',
         'icon': '🛡️'
     },
     {
-        'name': '🔍 OSINT (ПОИСК)',
-        'price': '$5',
-        'description': 'Полная информация о человеке/компании. Сливы, базы, соцсети, контакты, пробив.',
+        'name': '🔍 OSINT',
+        'price': '$3',
+        'description': 'Найду полную информацию о человеке/компании.',
         'icon': '🔍'
+    },
+    {
+        'name': '📘 МАНУАЛЫ',
+        'price': '$5',
+        'description': 'Скину мануалы по OSINT, сносу и другому.',
+        'icon': '📘'
+    },
+    {
+        'name': '📦 PRIVATE',
+        'price': '$10',
+        'description': 'Приглашу в группу со всеми материалами, обучениями, программами.',
+        'icon': '📦'
     }
 ]
 
@@ -28,12 +40,20 @@ channels = [
     {
         'name': '📢 @horinovpr',
         'link': 'https://t.me/horinovpr',
-        'description': 'основной канал',
-        'icon': '📡'
+        'description': 'основной канал'
+    },
+    {
+        'name': '🔄 @portalhor',
+        'link': 'https://t.me/portalhor',
+        'description': 'адаптер'
+    },
+    {
+        'name': '💬 @cgathorinov',
+        'link': 'https://t.me/cgathorinov',
+        'description': 'чат'
     }
 ]
 
-# Сообщения чата (если понадобятся)
 chat_messages = []
 
 @app.route('/')
@@ -65,13 +85,6 @@ def get_messages():
 def track():
     return jsonify({'status': 'ok'})
 
-@app.route('/order', methods=['POST'])
-def order():
-    data = request.json
-    # Здесь можно добавить сохранение заказов
-    return jsonify({'status': 'order received'})
-
 if __name__ == '__main__':
-    # Эта строчка важна для Render!
     port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)

@@ -12,28 +12,16 @@
         }
 
         body {
-            background: #000000;
-            color: #ffffff;
-            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', 'Courier New', monospace;
             line-height: 1.6;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* Матрица на фоне */
-        #matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.15;
-            pointer-events: none;
-        }
-
-        /* Снег (исправлен) */
+        /* Снег */
         .snow {
             position: fixed;
             top: 0;
@@ -41,17 +29,16 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 2;
+            z-index: 1;
         }
 
         .snowflake {
             position: absolute;
             color: #fff;
             user-select: none;
-            opacity: 0.4;
-            font-size: 10px;
+            opacity: 0.2;
+            font-size: 8px;
             animation: fall linear infinite;
-            border-radius: 50%;
         }
 
         @keyframes fall {
@@ -61,50 +48,31 @@
 
         .container {
             position: relative;
-            z-index: 3;
-            max-width: 800px;
+            z-index: 2;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        .project-title {
-            text-align: center;
-            font-size: 28px;
-            letter-spacing: 8px;
-            margin: 20px 0 20px;
-            border-bottom: 1px solid #fff;
-            padding-bottom: 10px;
-            font-weight: 300;
-            text-transform: uppercase;
-            font-family: 'Courier New', monospace;
-        }
-
-        /* Квадрат с ником */
-        .profile-card {
-            width: 320px;
-            height: 320px;
-            border: 2px solid #ffffff;
-            border-radius: 20px;
-            margin: 0 auto 30px;
+        /* Шапка */
+        .header {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            text-align: center;
-            background: #0a0a0a;
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+            gap: 30px;
+            margin: 40px 0 60px;
+            padding: 20px;
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid #333;
+            border-radius: 16px;
         }
 
         .avatar {
-            width: 120px;
-            height: 120px;
-            border: 2px solid #fff;
-            margin-bottom: 20px;
-            background: #111;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #444;
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         .avatar img {
@@ -113,346 +81,327 @@
             object-fit: cover;
         }
 
-        .nick-large {
-            font-size: 36px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-
-        .nick-small {
-            font-size: 20px;
-            opacity: 0.8;
+        .info h1 {
+            font-size: 32px;
+            font-weight: 400;
             letter-spacing: 1px;
-        }
-
-        /* Краткая информация (всегда видна) */
-        .short-info {
-            text-align: center;
-            margin: 20px 0 30px;
-            padding: 20px;
-            border: 1px solid #fff;
-            border-radius: 20px;
-            background: rgba(0, 10, 0, 0.7);
-            backdrop-filter: blur(2px);
-            font-size: 18px;
-            line-height: 1.6;
-        }
-
-        .short-info span {
+            margin-bottom: 5px;
             color: #fff;
-            font-weight: bold;
+        }
+
+        .info .nick {
+            font-size: 18px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .info .desc {
+            font-size: 16px;
+            color: #aaa;
+            max-width: 500px;
         }
 
         /* Навигация */
         .nav {
             display: flex;
-            justify-content: center;
-            gap: 15px;
+            gap: 20px;
             margin: 30px 0;
-            flex-wrap: wrap;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
         }
 
         .nav-btn {
             background: transparent;
-            border: 2px solid #ffffff;
-            border-radius: 12px;
-            color: #ffffff;
-            padding: 12px 25px;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            font-weight: bold;
+            border: none;
+            color: #888;
+            font-size: 18px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            padding: 8px 0;
+            transition: all 0.2s;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            min-width: 120px;
+            letter-spacing: 1px;
+            border-bottom: 2px solid transparent;
         }
 
         .nav-btn:hover {
-            background: #ffffff;
-            color: #000000;
-            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+            color: #fff;
+        }
+
+        .nav-btn.active {
+            color: #fff;
+            border-bottom-color: #fff;
         }
 
         /* Секции */
         .section {
             display: none;
-            margin: 30px 0;
-            padding: 30px;
-            border: 1px solid #ffffff;
-            border-radius: 20px;
-            background: #0a0a0a;
-            animation: fade 0.3s;
+            margin: 40px 0;
         }
 
         .section.active {
             display: block;
+            animation: fade 0.3s;
         }
 
         @keyframes fade {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .section-title {
-            font-size: 20px;
+            font-size: 14px;
+            color: #666;
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #fff;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
         }
 
         /* Price Grid */
         .price-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
         }
 
         .price-card {
-            border: 1px solid #ffffff;
-            border-radius: 16px;
+            background: #141414;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
             padding: 25px;
-            transition: all 0.3s;
-            background: #000;
+            transition: all 0.2s;
         }
 
         .price-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 20px rgba(255,255,255,0.2);
+            border-color: #444;
+            background: #1a1a1a;
         }
 
         .price-name {
-            font-size: 22px;
-            font-weight: bold;
+            font-size: 20px;
+            font-weight: 500;
             margin-bottom: 10px;
-            text-transform: uppercase;
+            color: #fff;
         }
 
         .price-desc {
-            color: #ccc;
-            margin-bottom: 15px;
-            font-size: 15px;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 20px;
             line-height: 1.5;
         }
 
         .price-value {
             font-size: 24px;
-            margin: 15px 0;
-            font-weight: bold;
+            font-weight: 300;
+            color: #fff;
+            margin-bottom: 20px;
         }
 
         .order-btn {
             background: transparent;
-            border: 1px solid #fff;
-            border-radius: 30px;
-            color: #fff;
+            border: 1px solid #333;
+            color: #ccc;
             padding: 10px 20px;
+            border-radius: 6px;
             cursor: pointer;
-            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            transition: all 0.2s;
             width: 100%;
-            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .order-btn:hover {
             background: #fff;
             color: #000;
+            border-color: #fff;
         }
 
         /* Channels Grid */
         .channels-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
 
         .channel-card {
-            border: 1px solid #fff;
-            border-radius: 30px;
-            padding: 20px;
+            background: #141414;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 25px;
             text-align: center;
             text-decoration: none;
-            color: #fff;
-            transition: all 0.3s;
-            display: block;
+            color: inherit;
+            transition: all 0.2s;
         }
 
         .channel-card:hover {
-            background: #fff;
-            color: #000;
+            border-color: #444;
+            background: #1a1a1a;
         }
 
         .channel-name {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .channel-desc {
+            color: #888;
+            font-size: 13px;
         }
 
         /* Telegram Contact */
         .telegram-contact {
-            margin-top: 20px;
+            margin-top: 60px;
             text-align: center;
         }
 
         .telegram-btn {
             display: inline-block;
             background: transparent;
-            border: 2px solid #fff;
-            border-radius: 40px;
-            color: #fff;
-            padding: 15px 40px;
-            font-size: 20px;
-            font-weight: bold;
+            border: 1px solid #333;
+            border-radius: 30px;
+            color: #ccc;
+            padding: 15px 50px;
+            font-size: 16px;
             text-decoration: none;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .telegram-btn:hover {
             background: #fff;
             color: #000;
-            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+            border-color: #fff;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 80px;
+            text-align: center;
+            color: #444;
+            font-size: 12px;
+            border-top: 1px solid #222;
+            padding-top: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            .price-grid {
+                grid-template-columns: 1fr;
+            }
+            .channels-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <canvas id="matrix-bg"></canvas>
     <div class="snow" id="snow"></div>
 
     <div class="container">
-        <div class="project-title">HORINOV PROJECT</div>
-
-        <!-- Квадрат с ником -->
-        <div class="profile-card">
+        <!-- Шапка с аватаркой -->
+        <div class="header">
             <div class="avatar">
-                <img src="https://i.ibb.co/wZSJLTvH/photo-2026-02-09-00-15-27-2.jpg" alt="avatar" onerror="this.style.display='none'; this.parentElement.innerHTML='📷';">
+                <img src="https://i.ibb.co/wZSJLTvH/photo-2026-02-09-00-15-27-2.jpg" alt="avatar" onerror="this.src='https://via.placeholder.com/100?text=horinov'">
             </div>
-            <div class="nick-large">horinov</div>
-            <div class="nick-small">@horinovex</div>
-        </div>
-
-        <!-- Краткая информация (всегда видна) -->
-        <div class="short-info">
-            <span>Специалист в OSINT-сфере.</span> Программирую и пишу разные софты и автоматизаторы под заказ.
+            <div class="info">
+                <h1>horinov</h1>
+                <div class="nick">@horinovex</div>
+                <div class="desc">Специалист в OSINT-сфере. Программирую и пишу софты и автоматизаторы под заказ.</div>
+            </div>
         </div>
 
         <!-- Навигация -->
         <div class="nav">
-            <button class="nav-btn" onclick="showSection('price')">PRICE</button>
+            <button class="nav-btn active" onclick="showSection('price')">PRICE</button>
             <button class="nav-btn" onclick="showSection('channels')">CHANNELS</button>
         </div>
 
-        <!-- Price Section (товары) -->
+        <!-- Price Section -->
         <div id="price-section" class="section active">
-            <div class="section-title">⟡ SERVICES / ТОВАРЫ</div>
+            <div class="section-title">⟡ УСЛУГИ</div>
             <div class="price-grid">
-                <!-- DEF -->
                 <div class="price-card">
                     <div class="price-name">🛡️ DEF</div>
-                    <div class="price-desc">
-                        Я лично защищаю вас от сватинга, пробива, доксинга. Хожу за вас в КФ.
-                    </div>
+                    <div class="price-desc">Я лично защищаю вас от сватинга, пробива, доксинга. Хожу за вас в КФ.</div>
                     <div class="price-value">$5 НАВСЕГДА</div>
-                    <button class="order-btn" onclick="order('Def')">→</button>
+                    <button class="order-btn" onclick="window.open('https://t.me/horinovex', '_blank')">СВЯЗАТЬСЯ</button>
                 </div>
 
-                <!-- OSINT -->
                 <div class="price-card">
                     <div class="price-name">🔍 OSINT</div>
-                    <div class="price-desc">
-                        Найду полную информацию о человеке/компании.
-                    </div>
+                    <div class="price-desc">Найду полную информацию о человеке/компании.</div>
                     <div class="price-value">$3</div>
-                    <button class="order-btn" onclick="order('OSINT')">→</button>
+                    <button class="order-btn" onclick="window.open('https://t.me/horinovex', '_blank')">СВЯЗАТЬСЯ</button>
                 </div>
 
-                <!-- Мануалы -->
                 <div class="price-card">
                     <div class="price-name">📘 МАНУАЛЫ</div>
-                    <div class="price-desc">
-                        Скину мануалы по OSINT, сносу и другому.
-                    </div>
+                    <div class="price-desc">Скину мануалы по OSINT, сносу и другому.</div>
                     <div class="price-value">$5</div>
-                    <button class="order-btn" onclick="order('Мануалы')">→</button>
+                    <button class="order-btn" onclick="window.open('https://t.me/horinovex', '_blank')">СВЯЗАТЬСЯ</button>
                 </div>
 
-                <!-- PRIVATE -->
                 <div class="price-card">
                     <div class="price-name">📦 PRIVATE</div>
-                    <div class="price-desc">
-                        Приглашу в группу со всеми материалами, обучениями, программами.
-                    </div>
+                    <div class="price-desc">Приглашу в группу со всеми материалами, обучениями, программами.</div>
                     <div class="price-value">$10</div>
-                    <button class="order-btn" onclick="order('Private group')">→</button>
+                    <button class="order-btn" onclick="window.open('https://t.me/horinovex', '_blank')">СВЯЗАТЬСЯ</button>
                 </div>
             </div>
         </div>
 
         <!-- Channels Section -->
         <div id="channels-section" class="section">
-            <div class="section-title">⟡ CHANNELS</div>
+            <div class="section-title">⟡ КАНАЛЫ</div>
             <div class="channels-grid">
                 <a href="https://t.me/horinovpr" target="_blank" class="channel-card">
                     <div class="channel-name">📢 @horinovpr</div>
-                    <div style="font-size: 14px;">основной канал</div>
+                    <div class="channel-desc">основной канал</div>
                 </a>
                 <a href="https://t.me/portalhor" target="_blank" class="channel-card">
                     <div class="channel-name">🔄 @portalhor</div>
-                    <div style="font-size: 14px;">адаптер</div>
+                    <div class="channel-desc">адаптер</div>
                 </a>
                 <a href="https://t.me/cgathorinov" target="_blank" class="channel-card">
                     <div class="channel-name">💬 @cgathorinov</div>
-                    <div style="font-size: 14px;">чат</div>
+                    <div class="channel-desc">чат</div>
                 </a>
             </div>
         </div>
 
         <!-- Telegram Contact -->
         <div class="telegram-contact">
-            <a href="https://t.me/horinovex" target="_blank" class="telegram-btn">📩 НАПИСАТЬ В TELEGRAM</a>
+            <a href="https://t.me/horinovex" target="_blank" class="telegram-btn">НАПИСАТЬ В TELEGRAM</a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            horinov project © 2026
         </div>
     </div>
 
     <script>
-        // Матрица
-        const canvas = document.getElementById('matrix-bg');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const cols = Math.floor(canvas.width / 20) + 1;
-        const ypos = Array(cols).fill(0);
-
-        function matrix() {
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#0f0';
-            ctx.font = '15px monospace';
-            ypos.forEach((y, ind) => {
-                const text = String.fromCharCode(0x30A0 + Math.random() * 96);
-                const x = ind * 20;
-                ctx.fillText(text, x, y);
-                if (y > canvas.height + Math.random() * 10000) {
-                    ypos[ind] = 0;
-                } else {
-                    ypos[ind] = y + 20;
-                }
-            });
-        }
-        setInterval(matrix, 50);
-
         // Снег
         function createSnow() {
             const snow = document.getElementById('snow');
-            for (let i = 0; i < 80; i++) {
+            for (let i = 0; i < 100; i++) {
                 const flake = document.createElement('div');
                 flake.className = 'snowflake';
                 flake.innerHTML = '•';
                 flake.style.left = Math.random() * 100 + '%';
                 flake.style.animationDuration = Math.random() * 3 + 2 + 's';
-                flake.style.fontSize = Math.random() * 12 + 6 + 'px';
-                flake.style.opacity = Math.random() * 0.4 + 0.2;
+                flake.style.fontSize = Math.random() * 12 + 4 + 'px';
+                flake.style.opacity = Math.random() * 0.3;
                 flake.style.animationDelay = Math.random() * 5 + 's';
                 snow.appendChild(flake);
             }
@@ -462,12 +411,9 @@
         // Навигация
         function showSection(section) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(section + '-section').classList.add('active');
-        }
-
-        // Заказ
-        function order(service) {
-            window.location.href = 'https://t.me/horinovex';
+            event.target.classList.add('active');
         }
     </script>
 </body>

@@ -52,6 +52,7 @@
             font-size: 12px;
             animation: fall linear infinite;
             filter: blur(0.5px);
+            border-radius: 50%;
         }
 
         @keyframes fall {
@@ -75,21 +76,22 @@
             margin: 40px 0 60px;
             padding: 25px;
             border: 1px solid #333;
+            border-radius: 20px;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(5px);
-            animation: glowPulse 3s infinite;
+            transition: all 0.3s;
         }
 
-        @keyframes glowPulse {
-            0% { border-color: #333; box-shadow: 0 0 20px rgba(255,255,255,0); }
-            50% { border-color: #555; box-shadow: 0 0 30px rgba(255,255,255,0.1); }
-            100% { border-color: #333; box-shadow: 0 0 20px rgba(255,255,255,0); }
+        .header:hover {
+            border-color: #666;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
         }
 
         .avatar {
             width: 100px;
             height: 100px;
             border: 2px solid #444;
+            border-radius: 16px;
             overflow: hidden;
             flex-shrink: 0;
             transition: transform 0.3s;
@@ -149,6 +151,7 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             position: relative;
+            border-radius: 0;
         }
 
         .nav-btn::after {
@@ -211,6 +214,7 @@
 
         .price-card {
             border: 1px solid #222;
+            border-radius: 20px;
             padding: 30px;
             background: rgba(0, 0, 0, 0.9);
             transition: all 0.3s;
@@ -229,9 +233,9 @@
         }
 
         .price-card:hover {
-            border-color: #444;
+            border-color: #555;
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255,255,255,0.05);
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.15);
         }
 
         .price-name {
@@ -260,6 +264,7 @@
         .order-btn {
             background: transparent;
             border: 1px solid #333;
+            border-radius: 12px;
             color: #ccc;
             padding: 12px 25px;
             cursor: pointer;
@@ -286,6 +291,7 @@
 
         .channel-card {
             border: 1px solid #222;
+            border-radius: 20px;
             padding: 30px 20px;
             text-align: center;
             text-decoration: none;
@@ -300,9 +306,9 @@
         .channel-card:nth-child(3) { animation-delay: 0.3s; }
 
         .channel-card:hover {
-            border-color: #444;
+            border-color: #555;
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255,255,255,0.05);
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.15);
         }
 
         .channel-name {
@@ -342,6 +348,7 @@
 
         .modal-content {
             border: 1px solid #333;
+            border-radius: 20px;
             background: #000;
             padding: 40px;
             max-width: 450px;
@@ -366,8 +373,9 @@
             font-size: 18px;
             color: #888;
             margin-bottom: 15px;
-            padding: 10px;
+            padding: 15px;
             border: 1px solid #222;
+            border-radius: 12px;
         }
 
         .modal-service span {
@@ -379,14 +387,16 @@
             margin: 25px 0;
             padding: 15px;
             border: 1px solid #222;
+            border-radius: 12px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
         }
 
         .modal-username:hover {
-            border-color: #444;
+            border-color: #555;
             background: #111;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         }
 
         .modal-username a {
@@ -407,8 +417,9 @@
 
         .modal-payment div {
             margin: 10px 0;
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #222;
+            border-radius: 12px;
         }
 
         .close-btn {
@@ -416,6 +427,7 @@
             padding: 15px;
             background: transparent;
             border: 1px solid #333;
+            border-radius: 12px;
             color: #ccc;
             cursor: pointer;
             margin-top: 20px;
@@ -552,7 +564,6 @@
             <div class="modal-payment">
                 <div>💳 BTC — 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</div>
                 <div>💸 USDT (TRC20) — TXYZ... (по запросу)</div>
-                <div>🏦 СБП — +7 (999) 999-99-99</div>
             </div>
             
             <button class="close-btn" onclick="closeModal()">ЗАКРЫТЬ</button>
